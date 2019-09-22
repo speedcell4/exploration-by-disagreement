@@ -76,7 +76,7 @@ class Dynamics(object):
         def add_ac(x):
             return tf.concat([x, ac], axis=-1)
 
-        with tf.variable_scope(self.scope,  reuse=True):
+        with tf.variable_scope(self.scope, reuse=True):
             x = flatten_two_dims(self.features)
             x = tf.layers.dense(add_ac(x), self.hidsize, activation=tf.nn.leaky_relu)
 

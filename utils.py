@@ -229,6 +229,8 @@ def tile_images(array, n_cols=None, max_images=None, div=1):
 
 import distutils.spawn
 import subprocess
+
+
 def save_np_as_mp4(frames, filename):
     print(filename)
     if distutils.spawn.find_executable('avconv') is not None:

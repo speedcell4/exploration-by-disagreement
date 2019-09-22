@@ -1,6 +1,5 @@
-import time
 import sys
-import os
+import time
 
 import numpy as np
 import tensorflow as tf
@@ -98,7 +97,7 @@ class PpoOptimizer(object):
             VecEnv(env_fns[l * self.lump_stride: (l + 1) * self.lump_stride], spaces=[self.ob_space, self.ac_space]) for
             l in range(self.nlump)]
         if self.unity:
-            for i in tqdm(range(int(nenvs*2.5 + 10))):
+            for i in tqdm(range(int(nenvs * 2.5 + 10))):
                 time.sleep(1)
             print('... long overdue sleep ends now')
             sys.stdout.flush()

@@ -3,6 +3,7 @@ try:
     from OpenGL import GLU
 except:
     print("no OpenGL.GLU")
+import datetime
 import functools
 import os.path as osp
 from functools import partial
@@ -22,8 +23,6 @@ from utils import random_agent_ob_mean_std
 from wrappers import MontezumaInfoWrapper, make_mario_env, \
     make_multi_pong, AddRandomStateToInfo, MaxAndSkipEnv, ProcessFrame84, ExtraTimeLimit, \
     make_unity_maze, StickyActionEnv
-
-import datetime
 
 
 def start_experiment(**args):
@@ -160,9 +159,9 @@ def make_env_all_params(rank, add_monitor, args):
         env = make_multi_pong()
     elif args["env_kind"] == 'unity':
         env = make_unity_maze(args["env"], seed=args["seed"], rank=rank,
-            ext_coeff=args["ext_coeff"], recordUnityVid=args['recordUnityVid'],
-            expID=args["unityExpID"], startLoc=args["startLoc"], door=args["door"],
-            tv=args["tv"], testenv=args["testenv"], logdir=logger.get_dir())
+                              ext_coeff=args["ext_coeff"], recordUnityVid=args['recordUnityVid'],
+                              expID=args["unityExpID"], startLoc=args["startLoc"], door=args["door"],
+                              tv=args["tv"], testenv=args["testenv"], logdir=logger.get_dir())
 
     if add_monitor:
         env = Monitor(env, osp.join(logger.get_dir(), '%.2i' % rank))
@@ -179,7 +178,8 @@ def get_experiment_environment(**args):
     setup_mpi_gpus()
 
     logger_context = logger.scoped_configure(dir='./logs/' +
-                                                 datetime.datetime.now().strftime(args["expID"] + "-openai-%Y-%m-%d-%H-%M-%S-%f"),
+                                                 datetime.datetime.now().strftime(
+                                                     args["expID"] + "-openai-%Y-%m-%d-%H-%M-%S-%f"),
                                              format_strs=['stdout', 'log',
                                                           'csv', 'tensorboard']
                                              if MPI.COMM_WORLD.Get_rank() == 0 else ['log'])
@@ -246,7 +246,6 @@ if __name__ == '__main__':
                         choices=["none", "idf", "vaesph", "vaenonsph", "pix2pix"])
     parser.add_argument('--num_dynamics', type=int, default=5)
     parser.add_argument('--var_output', action='store_true', default=True)
-
 
     args = parser.parse_args()
 

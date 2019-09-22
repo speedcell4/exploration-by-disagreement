@@ -1,11 +1,12 @@
-import os
 import itertools
+import os
 from collections import deque
 from copy import copy
 
 import gym
 import numpy as np
 from PIL import Image
+
 from utils import save_np_as_mp4
 
 
@@ -200,7 +201,7 @@ class MarioXReward(gym.Wrapper):
 
 
 class UnityRoomCounterWrapper(gym.Wrapper):
-    def __init__(self, env,use_ext_reward=True):
+    def __init__(self, env, use_ext_reward=True):
         gym.Wrapper.__init__(self, env)
         self.current_room = None
         self.visited_rooms = set()
@@ -211,7 +212,6 @@ class UnityRoomCounterWrapper(gym.Wrapper):
         self.current_room = None
         self.visited_rooms = set()
         return ob
-
 
     def step(self, action):
         ob, true_reward, done, info = self.env.step(action)
@@ -230,7 +230,7 @@ class UnityRoomCounterWrapper(gym.Wrapper):
                 self.visited_rooms.add(self.current_room)
             else:
                 reward = 0.0
-        info = {"unity_rooms":copy(self.visited_rooms)}
+        info = {"unity_rooms": copy(self.visited_rooms)}
         return ob, reward if not self.use_ext_reward else true_reward, done, info
 
 
@@ -282,11 +282,10 @@ class FrameSkip(gym.Wrapper):
 
 def make_mario_env(crop=True, frame_stack=True, clip_rewards=False):
     assert clip_rewards is False
-    import gym
     import retro
     from baselines.common.atari_wrappers import FrameStack
 
-    #gym.undo_logger_setup()
+    # gym.undo_logger_setup()
     env = retro.make('SuperMarioBros-Nes', 'Level1-1')
     buttons = env.buttons
     env = MarioXReward(env)
@@ -367,7 +366,7 @@ def make_multi_pong(frame_stack=True):
 
 
 def make_unity_maze(env_id, seed=0, rank=0, expID=0, frame_stack=True,
-        logdir=None, ext_coeff=1.0, recordUnityVid=False, **kwargs):
+                    logdir=None, ext_coeff=1.0, recordUnityVid=False, **kwargs):
     import os
     import sys
     import time
@@ -382,13 +381,13 @@ def make_unity_maze(env_id, seed=0, rank=0, expID=0, frame_stack=True,
     # gym.undo_logger_setup()  # deprecated in new version of gym
 
     # max 20 workers per expID, max 30 experiments per machine
-    if rank>=0 and rank<=200:
+    if rank >= 0 and rank <= 200:
         time.sleep(rank * 2)
     env = UnityEnvironment(file_name='envs/' + env_id,
-        worker_id=(expID % 60) * 200 + rank)
+                           worker_id=(expID % 60) * 200 + rank)
     maxsteps = 3000 if 'big' in env_id else 500
     env = GymWrapper(env, seed=seed, rank=rank, expID=expID, maxsteps=maxsteps,
-        **kwargs)
+                     **kwargs)
     if "big" in env_id:
         env = UnityRoomCounterWrapper(env, use_ext_reward=(ext_coeff != 0.0))
     if rank == 1 and recordUnityVid:
@@ -436,7 +435,7 @@ class RecordBestScores(gym.Wrapper):
         return state, reward, done, info
 
     def _record_last_episode(self, prefix=""):
-        save_np_as_mp4(self.frames, os.path.join(self.directory, prefix+'replay{}.mp4'.format(self.episode_number)))
+        save_np_as_mp4(self.frames, os.path.join(self.directory, prefix + 'replay{}.mp4'.format(self.episode_number)))
 
 
 class StickyActionEnv(gym.Wrapper):

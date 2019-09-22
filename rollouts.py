@@ -182,7 +182,7 @@ class Rollout(object):
                     print("All visited levels")
                     print(self.all_visited_rooms)
             if "unity_rooms" in keys_:
-                #Unity logging.
+                # Unity logging.
                 temp = sorted(list(set.union(*all_ep_infos['unity_rooms'])))
                 self.all_visited_rooms.extend(temp)
                 self.all_visited_rooms = sorted(list(set(self.all_visited_rooms)))
